@@ -1,0 +1,146 @@
+import random
+from string import ascii_lowercase
+dictionary
+def get_random_questions(questions, num_easy=2, num_medium=2, num_hard=1):
+    selected_questions = []
+    easy_questions = questions.get('easy', {})
+    medium_questions = questions.get('medium', {})
+    hard_questions = questions.get('hard', {})
+selected_questions.extend(
+        [(question, answer_choices, 'easy') 
+         for question, answer_choices in random.sample(
+             list(easy_questions.items()), 
+             min(num_easy, len(easy_questions)))])
+    selected_questions.extend(
+        [(question, answer_choices, 'medium') 
+         for question, answer_choices in random.sample(
+             list(medium_questions.items()), 
+             min(num_medium, len(medium_questions)))])
+    selected_questions.extend(
+        [(question, answer_choices, 'hard') 
+         for question, answer_choices in random.sample(
+             list(hard_questions.items()), 
+             min(num_hard, len(hard_questions)))])
+    return selected_questions
+def display_question(index, question, choices):
+    # Print the question number and the question itself
+    print(f"\nQuestion {index}:")
+    print(f"{question}?")
+    shuffled_choices = dict(zip(ascii_lowercase, random.sample(choices, len(choices))))
+    for label, choice in shuffled_choices.items():
+        print(f"  {label}) {choice}")
+    return shuffled_choices
+def get_user_answer(shuffled_choices):
+    user_input = input("\nChoice? ")
+    while user_input not in shuffled_choices:
+        user_input = input("Invalid choice. Please select a valid option (a, b, c, d): ")
+    return user_input
+def ask_for_hint(correct_choices):
+    want_hint = input("\nDo you want a hint? yes/no: ")
+    if want_hint.lower() == "yes":
+        print(f"The answer is one of the following: {correct_choices[:2]}")
+        return True
+    return False
+def run_quiz(questions):
+ selected_questions = get_random_questions(questions)
+    correct_answers_count = 0
+    for index, (quiz_question, answer_choices, difficulty) in enumerate(selected_questions, start=1):
+        hint_used = False
+        correct_answer = answer_choices[0]
+        shuffled_choices = display_question(index, quiz_question, answer_choices)
+        user_answer_label = get_user_answer(shuffled_choices)
+        user_answer = shuffled_choices.get(user_answer_label)
+while user_answer != correct_answer:
+            print("Your answer is not correct")
+if ask_for_hint(answer_choices):
+                user_answer_label = get_user_answer(shuffled_choices)
+                user_answer = shuffled_choices.get(user_answer_label)
+                hint_used = True
+            else:
+                print("Incorrect!")
+                break
+if user_answer == correct_answer:
+            if hint_used:
+                if difficulty == 'easy':
+                    correct_answers_count += 0.5
+                elif difficulty == 'medium':
+                    correct_answers_count += 1
+                else:
+                    correct_answers_count += 2
+            else:
+                if difficulty == 'easy':
+                    correct_answers_count += 1
+                elif difficulty == 'medium':
+                    correct_answers_count += 2
+                else:
+                    correct_answers_count += 4
+            print("Correct!")
+    print(f"\nYou got {correct_answers_count} correct out of {len(selected_questions)} questions")
+QUIZ_QUESTIONS = {
+    'easy': {
+        "Which of the following words is an example of a continent?": [
+            "Africa", "China", "The South Pole", "New York",
+        ],
+        "Which one is the capital city of Italy?": [
+            "Rome",
+            "Turin",
+            "Milan",
+            "Florence",
+        ],
+        "In which year did WW1 start?": [
+            "1914",
+            "1916",
+            "1918",
+            "1913",
+        ],
+        "Which country was ruled by Mussolini?": [
+            "Italy",
+            "France",
+            "Germany",
+            "Austria",
+        ],
+    },
+    'medium': {
+        "What mountains can be found in Romania?": [
+            "Bucegi, Retezat",
+            "Watzmann, Alpspitze",
+            "Marmolada, Cimone",
+            "Triglav, Stol",
+        ],
+        "How long is the Danube river?": [
+            "2850 km",
+            "2500 km",
+            "2680 km",
+            "2855 km",
+        ],
+        "In which city did the Revolution from 1989 start?": [
+            "Timisoara",
+            "Sibiu",
+            "Bucharest",
+            "Cluj",
+        ],
+    },
+    'hard': {
+        "Which of the following countries were neutral during WW2?": [
+            "Switzerland",
+            "Italy",
+            "UK",
+            "USA",
+        ],
+        "Which was the longest-lasting empire in history?": [
+            "Roman Empire",
+            "Byzantine Empire",
+            "Ethiopian Empire",
+            "Ottoman Empire",
+        ],
+        "Who was the first king of Ancient Egypt?": [
+            "Narmer",
+            "Hor-Aha",
+            "Djet",
+            "Djer",
+        ],
+    }
+}
+
+# Run the quiz
+run_quiz(QUIZ_QUESTIONS)
